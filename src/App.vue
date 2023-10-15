@@ -1,32 +1,48 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <Select></Select>
+    <RemoteSelect></RemoteSelect>
+    <Cascader></Cascader>
+    <el-button @click="handleClick">打开dialog</el-button>
+    <el-button @click="handTest">测试</el-button>
   </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import Select from './views/Select.vue';
+import RemoteSelect from './views/RemoteSelect.vue'
+import Cascader from './views/Cascader.vue';
+import SettingDialog from './views/SettingDialog.vue';
+import JsDialog from './components/JsDialog';
+@Component({
+  components: {
+    Select, RemoteSelect, Cascader
+  },
+})
+export default class App extends Vue {
+  data: any = {
+    value: '213',
+    key: 'fas',
+  }
 
-#nav {
-  padding: 30px;
+  handleClick() {
+    // 第一个参数是要打开的弹窗组件，第二个参数是要传递给该组件的参数
+    JsDialog(SettingDialog, {
+      data: this.data,
+      onConfirm: (data: any) => {
+        console.log('从dialog接收的参数', data)
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+      }
+    }).show()
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+  }
+  created() {
+
+  }
+  handTest() {
+    this.$emit('mytest')
   }
 }
-</style>
+</script>
+<style lang="scss"></style>
